@@ -7,8 +7,8 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
-    Spieler1 spieler1 = new Spieler1();
-    Spieler2 spieler2 = new Spieler2();
+    //Spieler1 spieler1 = new Spieler1();
+    //Spieler2 spieler2 = new Spieler2();
     static final int SCREEN_WIDTH = 1000;
     static final int SCREEN_HEIGHT = 800;
     static final int UNIT_SIZE = 25;
@@ -37,11 +37,8 @@ public class GamePanel extends JPanel implements ActionListener {
         startGame();
     }
     public void startGame() {
-        spieler1.x1[0] = 500;
-        spieler1.y1[0] = 500;
         newApple();
         running=true;
-        spieler1.running1=true;
         timer = new Timer(DELAY,this); //was macht Timer()?; aus welcher Klasse wurde ein Objekt erzeugt?; was bedeutet this in diesem Kontext?
         timer.start();
     }
