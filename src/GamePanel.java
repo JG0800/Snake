@@ -7,9 +7,10 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
-    //test
-    static final int SCREEN_WIDTH = 600;
-    static final int SCREEN_HEIGHT = 600;
+    Spieler1 spieler1 = new Spieler1();
+    Spieler2 spieler2 = new Spieler2();
+    static final int SCREEN_WIDTH = 1000;
+    static final int SCREEN_HEIGHT = 800;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE;
     static final int DELAY = 75;
@@ -36,8 +37,11 @@ public class GamePanel extends JPanel implements ActionListener {
         startGame();
     }
     public void startGame() {
+        spieler1.x1[0] = 500;
+        spieler1.y1[0] = 500;
         newApple();
         running=true;
+        spieler1.running1=true;
         timer = new Timer(DELAY,this); //was macht Timer()?; aus welcher Klasse wurde ein Objekt erzeugt?; was bedeutet this in diesem Kontext?
         timer.start();
     }
@@ -71,6 +75,15 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
+            /*for(int i=0; i< spieler1.bodyParts1; i++) {
+                if (i == 0) {
+                    g.setColor(Color.green);
+                    g.fillRect(spieler1.x1[i], spieler1.y1[i], UNIT_SIZE, UNIT_SIZE);
+                } else {
+                    g.setColor(new Color(45, 180, 0));
+                    g.fillRect(spieler1.x1[i], spieler1.x1[i], UNIT_SIZE, UNIT_SIZE);
+                }
+            }*/
             g.setColor(Color.red);
             g.setFont(new Font("Ink Free", Font.BOLD,40));
             FontMetrics metrics = getFontMetrics(g.getFont());
@@ -94,15 +107,13 @@ public class GamePanel extends JPanel implements ActionListener {
             }
     }
 
-
-
-
     public void move(){
         for (int i=bodyParts; i>0;i--){ //i=6
             x[i] = x[i-1]; //array x[6] hat jetzt die Koordinaten von x[5] usw.
             y[i] = y[i-1];
         }
         /*Die aktualisierung muss als erstes erfolgen, denn:
+        * x[1] == x[0] bedeutet x1,x0 sind beide an der x Koordinate 0
         * x[1] == x[0] bedeutet x1,x0 sind beide an der x Koordinate 0
         * danach wird x[0] erhöht, demnach ist x[0]=25; x[1]=0
         * würde mann x[0] erst erhöhen wäre x[0]=25, x[1]=25
@@ -190,9 +201,12 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e)  {
         if (running) {
             move();
+            //spieler1.move();
             checkApple();
+            //spieler1.checkApple();
             scoreEffects();
             checkCollisions();
+            //spieler1.checkCollisions1();
         }
         repaint();
     }
