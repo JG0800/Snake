@@ -20,13 +20,11 @@ public class GamePanel extends JPanel implements ActionListener {
     int bodyParts = 6;
     int bodyParts2 = 6;
     int applesEaten;
-    int applesEaten2;
-    int appleX;
-    int appleX2;
-    int appleY;
-    int appleY2;
+    int[][] apples = new int[5][5];
+    int appleX = 0;
+    int appleY = 1;
+    int appleNum;
     char direction = 'R';
-    char direction2 = 'L';
     boolean isCrawling = false;
     Timer timer;
     Random random;
@@ -40,7 +38,7 @@ public class GamePanel extends JPanel implements ActionListener {
         startGame();
     }
     public void startGame() {
-        newApple();
+        newApple(1);
         isCrawling=true;
         timer = new Timer(DELAY,this); //was macht Timer()?; aus welcher Klasse wurde ein Objekt erzeugt?; was bedeutet this in diesem Kontext?
         timer.start();
@@ -58,7 +56,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.drawLine(0,i*UNIT_SIZE,SCREEN_WIDTH,i*UNIT_SIZE);
             }
             g.setColor(Color.red);
-            g.fillOval(appleX,appleY,UNIT_SIZE,UNIT_SIZE);
+            g.fillOval(apples[appleNum][appleX],apples[appleNum][appleY],UNIT_SIZE,UNIT_SIZE);
 
             g.setColor(Color.white);
             if (rockX != -1 && rockY != -1) {
@@ -94,9 +92,10 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void newApple(){
-        appleX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
-        appleY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
+    public void newApple(int x){
+        int i = x;
+        apples[i][appleX] = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
+        apples[i][appleY] = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
     }
     public void newRock(){
         int i = 0;
@@ -135,10 +134,10 @@ public class GamePanel extends JPanel implements ActionListener {
 
     }
     public void checkApple(){
-        if ((x[0] == appleX)&&(y[0] == appleY)){
+        if ((x[0] == apples[appleNum][appleX])&&(y[0] == apples[appleNum][appleY])){
             bodyParts++;
             applesEaten++;
-            newApple();
+            newApple(1);
         }
     }
     public void checkRock(){
@@ -213,7 +212,6 @@ public class GamePanel extends JPanel implements ActionListener {
     public class MyKeyAdapter extends KeyAdapter{
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println(e.getKeyCode());
             switch (e.getKeyCode()){
 
                 case 65: //left
