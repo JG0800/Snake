@@ -7,15 +7,19 @@ public class Snake {
     private int buttonRight;
     private int applesEaten = 0;
     private int bodyParts = 6;
+    private int snakeNum;
     private char direction;
 
 
-    Snake(int spawnX, int spawnY, int buttonDown, int buttonUp, int buttonLeft, int buttonRight, char spawnDirection) {
+
+    Snake(int spawnX, int spawnY, int buttonDown, int buttonUp, int buttonLeft, int buttonRight, char spawnDirection, int snakeNum) {
         this.buttonDown = buttonDown;
         this.buttonUp = buttonUp;
         this.buttonLeft = buttonLeft;
         this.buttonRight = buttonRight;
         this.direction = spawnDirection;
+        this.posX[snakeNum] = spawnX;
+        this.posY[snakeNum] = spawnY;
     }
     public int[] getPosX() {
         return posX;

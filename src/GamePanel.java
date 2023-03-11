@@ -35,13 +35,15 @@ public class GamePanel extends JPanel implements ActionListener {
         initSnakes();
         newApple();
         isCrawling=true;
-        timer = new Timer(DELAY,this); //was macht Timer()?; aus welcher Klasse wurde ein Objekt erzeugt?; was bedeutet this in diesem Kontext?
+        timer = new Timer(DELAY,this);
         timer.start();
     }
 
     private void initSnakes() {
-        this.snakes[0] = new Snake(GAME_UNITS,GAME_UNITS, KeyEvent.VK_DOWN, KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 'R');
-        this.snakes[1] = new Snake(GAME_UNITS, GAME_UNITS, KeyEvent.VK_S, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, 'L');
+        int a = 0;
+        int b = 1;
+        this.snakes[a] = new Snake(0,300, KeyEvent.VK_DOWN, KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 'R',a);
+        this.snakes[b] = new Snake(0, 0, KeyEvent.VK_S, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, 'R',b);
     }
 
     public void paintComponent(Graphics g) { //??
@@ -64,16 +66,30 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.fillOval(rockX - ROCK_SIZE/2, rockY - ROCK_SIZE/2, ROCK_SIZE, ROCK_SIZE);
             }*/
 
-            for (Snake snake : snakes) {
-                for(int i=0; i<snake.getBodyParts(); i++) {
-                    if (i == 0) {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
-                    } else {
-                        g.setColor(Color.GREEN.darker());
-                        g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+            for (Snake snake : snakes) {//snake
+                if ( snake == this.snakes[0] ){
+                    for(int i=0; i<snake.getBodyParts(); i++) {
+                        if (i == 0) {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                        } else {
+                            g.setColor(Color.GREEN.darker());
+                            g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                        }
                     }
                 }
+                else if ( snake == this.snakes[1] ){
+                    for(int i=0; i<snake.getBodyParts(); i++) {
+                        if (i == 0) {
+                            g.setColor(Color.blue);
+                            g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                        } else {
+                            g.setColor(Color.blue.darker());
+                            g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                        }
+                    }
+                }
+
             }
 
             /*g.setColor(Color.red);
@@ -102,7 +118,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void move() {
         for (Snake snake : snakes) {
             for (int i = snake.getBodyParts(); i > 0; i--) {
-                snake.setPosX(snake.getPosX()[i - 1], i);
+                snake.setPosX(snake.getPosX()[i - 1], i); //????
                 snake.setPosY(snake.getPosY()[i - 1], i);
             }
             switch (snake.getDirection()) {
@@ -147,33 +163,36 @@ public class GamePanel extends JPanel implements ActionListener {
             i = i + 2;
         }
     }*/
-    /*public void checkCollisions(){
-        for (int i = bodyParts; i>0; i--){ //i=6
+    public void checkCollisions(){
+        for (Snake snake : snakes){
+            if (snake.getPosX()[0] < 0){
+                isCrawling = false;
+            }
+            //check if head touches right border
+            if (snake.getPosX()[0] > SCREEN_WIDTH){
+                isCrawling = false;
+            }
+            //check if head touches top border
+            if (snake.getPosY()[0] < 0) {
+                isCrawling = false;
+            }
+            //check if head touches bottom border
+            if (snake.getPosY()[0] >  SCREEN_HEIGHT) {
+                isCrawling = false;
+            }
+            if (!isCrawling){
+                timer.stop();
+            }
+        }
+       /* for (int i = bodyParts; i>0; i--){ //i=6
             //prüft ob der Kopf die einzelnen Teile der Schlange frisst
             if ((x[0] == x[i])&&(y[0] == y[i])){ //wenn x[0] == x[6] also der Kopf, den letzten Teil der Schlange frisst
                 isCrawling = false;
             }
-        }
+        }*/
         //check if head touches left border
-        if (x[0] < 0){
-            isCrawling = false;
-        }
-        //check if head touches right border
-        if (x[0] > SCREEN_WIDTH){
-            isCrawling = false;
-        }
-        //check if head touches top border
-        if (y[0] < 0) {
-            isCrawling = false;
-        }
-        //check if head touches bottom border
-        if (y[0] > SCREEN_HEIGHT) {
-            isCrawling = false;
-        }
-        if (!isCrawling){
-            timer.stop();
-        }
-    }*/
+
+    }
 
 
     @Override
@@ -181,15 +200,14 @@ public class GamePanel extends JPanel implements ActionListener {
         if (isCrawling) {
             move();
             /*checkApple();*/
-            /*scoreEffects();
-            checkCollisions();*/
+            //scoreEffects();
+            checkCollisions();
         }
         repaint();
     }
     public class MyKeyAdapter extends KeyAdapter{
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println(e.getKeyCode());
             Snake turningSnake = null;
             for (Snake snake:snakes) {
                 if (e.getKeyCode() == snake.getButtonLeft() || e.getKeyCode() == snake.getButtonRight() || e.getKeyCode() == snake.getButtonUp() || e.getKeyCode() == snake.getButtonDown()) {
