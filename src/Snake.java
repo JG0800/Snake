@@ -9,7 +9,7 @@ public class Snake {
     private int bodyParts = 6;
     private int snakeNum;
     private char direction;
-//test
+//test123
 
 
     Snake(int spawnX, int spawnY, int buttonDown, int buttonUp, int buttonLeft, int buttonRight, char spawnDirection, int snakeNum) {
