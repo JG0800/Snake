@@ -1,5 +1,5 @@
 public class Snake {
-    private int posX[] = new int [GamePanel.GAME_UNITS];;
+    private int posX[] = new int [GamePanel.GAME_UNITS];
     private int posY[] = new int [GamePanel.GAME_UNITS];
     private int buttonDown;
     private int buttonUp;
@@ -12,14 +12,14 @@ public class Snake {
 //test123
 
 
-    Snake(int spawnX, int spawnY, int buttonDown, int buttonUp, int buttonLeft, int buttonRight, char spawnDirection, int snakeNum) {
+    Snake(int spawnX, int spawnY, int buttonDown, int buttonUp, int buttonLeft, int buttonRight, char spawnDirection) {
         this.buttonDown = buttonDown;
         this.buttonUp = buttonUp;
         this.buttonLeft = buttonLeft;
         this.buttonRight = buttonRight;
         this.direction = spawnDirection;
-        this.posX[snakeNum] = spawnX;
-        this.posY[snakeNum] = spawnY;
+        this.posX[0] = spawnX;
+        this.posY[0] = spawnY;
     }
     public int[] getPosX() {
         return posX;

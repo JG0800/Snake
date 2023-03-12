@@ -40,10 +40,8 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     private void initSnakes() {
-        int a = 0;
-        int b = 1;
-        this.snakes[a] = new Snake(0,300, KeyEvent.VK_DOWN, KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 'R',a);
-        this.snakes[b] = new Snake(0, 0, KeyEvent.VK_S, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, 'R',b);
+        this.snakes[0] = new Snake(0,300, KeyEvent.VK_DOWN, KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 'R');
+        this.snakes[1] = new Snake(0, 0, KeyEvent.VK_S, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, 'R');
     }
 
     public void paintComponent(Graphics g) { //??
