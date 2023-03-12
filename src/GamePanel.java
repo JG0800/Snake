@@ -136,13 +136,14 @@ public class GamePanel extends JPanel implements ActionListener {
 
         }
     }
-    /*public void checkApple(){
-        if ((x[0] == appleX)&&(y[0] == appleY)){
-            snake;
-            applesEaten++;
-            newApple();
+    public void checkApple(){
+        for ( Snake snake : snakes) {
+            if (snake.getPosX()[0] == appleX && snake.getPosY()[0] == appleY) {
+                snake.addApplesEaten();
+                newApple();
+            }
         }
-    }*/
+    }
     /*public void checkRock(){
         int rockBoxLeft = rockX - ROCK_SIZE / 2;
         int rockBoxRight = rockX + ROCK_SIZE / 2;
@@ -161,7 +162,21 @@ public class GamePanel extends JPanel implements ActionListener {
             i = i + 2;
         }
     }*/
+
+    //checks if snake touches any other snake
     public void checkCollisions(){
+        for (Snake snake : snakes){
+            for (Snake snake2 : snakes){ //ich loope hier 2 mal durch die snakes um alle möglichen Kombinationen von Schlangen, die sich berühren können zu überprüfen
+                if (snake != snake2){
+                    for (int i = 0; i < snake.getBodyParts(); i++){
+                        if (snake.getPosX()[0] == snake2.getPosX()[i] && snake.getPosY()[0] == snake2.getPosY()[i]){ //check if head touches body of other snake
+                            isCrawling = false;
+                        }
+                    }
+                }
+            }
+        }
+
         for (Snake snake : snakes){
             if (snake.getPosX()[0] < 0){
                 isCrawling = false;
@@ -182,13 +197,15 @@ public class GamePanel extends JPanel implements ActionListener {
                 timer.stop();
             }
         }
-       /* for (int i = bodyParts; i>0; i--){ //i=6
-            //prüft ob der Kopf die einzelnen Teile der Schlange frisst
-            if ((x[0] == x[i])&&(y[0] == y[i])){ //wenn x[0] == x[6] also der Kopf, den letzten Teil der Schlange frisst
-                isCrawling = false;
+
+        //check if snake touches itself
+        for (Snake snake : snakes) {
+            for (int i = snake.getBodyParts(); i > 0; i--) {
+                if ((snake.getPosX()[0] == snake.getPosX()[i]) && (snake.getPosY()[0] == snake.getPosY()[i])) {
+                    isCrawling = false;
+                }
             }
-        }*/
-        //check if head touches left border
+        }
 
     }
 
@@ -197,7 +214,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e)  {
         if (isCrawling) {
             move();
-            /*checkApple();*/
+            checkApple();
             //scoreEffects();
             checkCollisions();
         }

@@ -73,6 +73,7 @@ public class Snake {
     }
 
     public void addApplesEaten() {
+        this.addBodyPart();
         applesEaten++;
     }
 
