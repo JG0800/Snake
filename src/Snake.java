@@ -7,7 +7,6 @@ public class Snake {
     private int buttonRight;
     private int applesEaten = 0;
     private int bodyParts = 6;
-    private int snakeNum;
     private char direction;
 //test123
 
