@@ -1,5 +1,9 @@
--zweite Schlange hinzufügen
---spawnpunkt ändern
--Collision mit zweiter schlange
+-startGame Bildschirm
+--button Spiel starten
+
+-GameOver
+--Punktezahl
+
+
 -mehrere Äpfel
 -mehrere Steine

@@ -1,6 +1,7 @@
 import javax.swing.*;
 
-public class GameFrame extends JFrame { //extends erweitert eine Klasse um die Inhalte einer anderen Klasse
+public class GameFrame extends JFrame {
+
     GameFrame(){
         GamePanel Panel = new GamePanel();
         this.add(new GamePanel());
@@ -10,5 +11,7 @@ public class GameFrame extends JFrame { //extends erweitert eine Klasse um die I
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+
     }
+
 }
