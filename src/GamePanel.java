@@ -1,3 +1,5 @@
+import javafx.scene.input.KeyCode;
+
 import javax.management.DescriptorRead;
 import javax.swing.*;
 import java.awt.*;
@@ -19,10 +21,9 @@ public class GamePanel extends JPanel implements ActionListener {
     int appleY;
     int appleX;
     Snake[] snakes = new Snake[2];
-    JButton startButton;
-    Menu menu = new Menu();
-    boolean isCrawling = false;
     boolean startMenu = true;
+    boolean isCrawling = false;
+
     Timer timer;
     Random random;
 
@@ -32,25 +33,9 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
-        startMenu();
-
     }
-
-    public void startMenu(){
-        startButton =  new JButton("Spiel starten");
-        startButton.setBounds(100,100,100,100);
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                startGame();
-                startMenu = false;
-            }
-        });
-        this.add(startButton);
-    }
-
 
     public void startGame() {
-        this.remove(startButton);
         initSnakes();
         newApple();
         isCrawling=true;
@@ -63,65 +48,74 @@ public class GamePanel extends JPanel implements ActionListener {
         this.snakes[1] = new Snake(0, 0, KeyEvent.VK_S, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, 'R');
     }
 
-    public void paintComponent(Graphics g) { //??
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
     }
 
     public void draw(Graphics g){
+        if (startMenu){
+            g.setColor(Color.white);
+            g.setFont(new Font("Ink Free", Font.BOLD,40));
+            FontMetrics metrics3 = getFontMetrics(g.getFont());
+            g.drawString("Press Space to start the game", (SCREEN_WIDTH-metrics3.stringWidth("Press Space to start the game"))/2 ,SCREEN_HEIGHT-g.getFont().getSize());
+        }
+        else {
             if (isCrawling){
-                g.setColor(Color.black);
-                for(int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++) {
-                    g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-                    g.drawLine(0,i*UNIT_SIZE,SCREEN_WIDTH,i*UNIT_SIZE);
-                }
-                g.setColor(Color.red);
-                g.fillOval(appleX,appleY,UNIT_SIZE,UNIT_SIZE);
+                    g.setColor(Color.black);
+                    for(int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++) {
+                        g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+                        g.drawLine(0,i*UNIT_SIZE,SCREEN_WIDTH,i*UNIT_SIZE);
+                    }
+                    g.setColor(Color.red);
+                    g.fillOval(appleX,appleY,UNIT_SIZE,UNIT_SIZE);
 
-                g.setColor(Color.white);
-            /*if (rockX != -1 && rockY != -1) {
-                g.fillOval(rockX - ROCK_SIZE/2, rockY - ROCK_SIZE/2, ROCK_SIZE, ROCK_SIZE);
-            }*/
+                    g.setColor(Color.white);
+                /*if (rockX != -1 && rockY != -1) {
+                    g.fillOval(rockX - ROCK_SIZE/2, rockY - ROCK_SIZE/2, ROCK_SIZE, ROCK_SIZE);
+                }*/
 
-                for (Snake snake : snakes) {//snake
-                    if ( snake == this.snakes[0] ){
-                        for(int i=0; i<snake.getBodyParts(); i++) {
-                            if (i == 0) {
-                                g.setColor(Color.GREEN);
-                                g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
-                            } else {
-                                g.setColor(Color.GREEN.darker());
-                                g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                    for (Snake snake : snakes) {//snake
+                        if ( snake == this.snakes[0] ){
+                            for(int i=0; i<snake.getBodyParts(); i++) {
+                                if (i == 0) {
+                                    g.setColor(Color.GREEN);
+                                    g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                                } else {
+                                    g.setColor(Color.GREEN.darker());
+                                    g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                                }
                             }
                         }
-                    }
-                    else if ( snake == this.snakes[1] ){
-                        for(int i=0; i<snake.getBodyParts(); i++) {
-                            if (i == 0) {
-                                g.setColor(Color.blue);
-                                g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
-                            } else {
-                                g.setColor(Color.blue.darker());
-                                g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                        else if ( snake == this.snakes[1] ){
+                            for(int i=0; i<snake.getBodyParts(); i++) {
+                                if (i == 0) {
+                                    g.setColor(Color.blue);
+                                    g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                                } else {
+                                    g.setColor(Color.blue.darker());
+                                    g.fillRect(snake.getPosX()[i], snake.getPosY()[i], UNIT_SIZE, UNIT_SIZE);
+                                }
                             }
                         }
+
                     }
 
+                    g.setColor(Color.green);
+                    g.setFont(new Font("Ink Free", Font.BOLD,40));
+                    FontMetrics metrics = getFontMetrics(g.getFont());
+                    g.drawString("Score: "+snakes[0].getApplesEaten(), (0 + metrics.stringWidth("Score: "+snakes[0].getApplesEaten())/2) ,g.getFont().getSize());
+
+                    g.setColor(Color.blue);
+                    g.setFont(new Font("Ink Free", Font.BOLD,40));
+                    FontMetrics metrics1 = getFontMetrics(g.getFont());
+                    g.drawString("Score: "+snakes[1].getApplesEaten(), (int) (SCREEN_WIDTH-(metrics1.stringWidth("Score: "+snakes[1].getApplesEaten())*1.5 )),g.getFont().getSize());
                 }
-
-                g.setColor(Color.green);
-                g.setFont(new Font("Ink Free", Font.BOLD,40));
-                FontMetrics metrics = getFontMetrics(g.getFont());
-                g.drawString("Score: "+snakes[0].getApplesEaten(), (0 + metrics.stringWidth("Score: "+snakes[0].getApplesEaten())/2) ,g.getFont().getSize());
-
-                g.setColor(Color.blue);
-                g.setFont(new Font("Ink Free", Font.BOLD,40));
-                FontMetrics metrics1 = getFontMetrics(g.getFont());
-                g.drawString("Score: "+snakes[1].getApplesEaten(), (int) (SCREEN_WIDTH-(metrics1.stringWidth("Score: "+snakes[1].getApplesEaten())*1.5 )),g.getFont().getSize());
+                else {
+                    //gameOver(g);
+                }
             }
-            else {
-                //gameOver(g);
-            }
+
         }
 
 
@@ -251,6 +245,16 @@ public class GamePanel extends JPanel implements ActionListener {
     public class MyKeyAdapter extends KeyAdapter{
         @Override
         public void keyPressed(KeyEvent e) {
+
+            if (startMenu){
+                if (e.getKeyCode()==32){
+                    startMenu=false;
+                    startGame();
+                }
+            }
+
+
+
             Snake turningSnake = null;
             for (Snake snake:snakes) {
                 if (e.getKeyCode() == snake.getButtonLeft() || e.getKeyCode() == snake.getButtonRight() || e.getKeyCode() == snake.getButtonUp() || e.getKeyCode() == snake.getButtonDown()) {
